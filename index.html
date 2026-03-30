@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sites Sob Medida para Negócios Locais | Cada Site é Único</title>
+  <meta name="description" content="Criamos sites únicos e personalizados para negócios locais. Sem templates. Cada projeto é uma obra exclusiva pensada para o seu negócio.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #111114;
+      --bg-card: #18181b;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #6366f1;
+      --accent-light: #818cf8;
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      --accent-warm: #f59e0b;
+      --border: #27272a;
+      --radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══ CURSOR GLOW ═══ */
+    .cursor-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: left 0.3s ease, top 0.3s ease;
+    }
+
+    /* ═══ NAV ═══ */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 0 2rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    nav.scrolled {
+      background: rgba(9, 9, 11, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--accent-light);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: white !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 100px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent-light);
+      transform: translateY(-1px);
+    }
+
+    /* ═══ HERO ═══ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 2rem 6rem;
+      overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 100%);
+    }
+
+    .hero-orbs {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: orbFloat 20s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: var(--accent);
+      top: -10%;
+      right: -5%;
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      background: #8b5cf6;
+      bottom: -5%;
+      left: -5%;
+      animation-delay: -7s;
+    }
+
+    .orb-3 {
+      width: 300px;
+      height: 300px;
+      background: #ec4899;
+      top: 40%;
+      left: 50%;
+      animation-delay: -14s;
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -30px) scale(1.05); }
+      66% { transform: translate(-20px, 20px) scale(0.95); }
+    }
+
+    .hero-content {
+      position: relative;
+      text-align: center;
+      max-width: 900px;
+      z-index: 2;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent-glow);
+      border: 1px solid rgba(99,102,241,0.2);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-light);
+      margin-bottom: 2rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .hero-badge .pulse {
+      width: 6px;
+      height: 6px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--accent-light) 0%, #c084fc 50%, #f472b6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      letter-spacing: -0.01em;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 0 30px rgba(99,102,241,0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(99,102,241,0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--text-muted);
+      background: rgba(255,255,255,0.03);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat { text-align: center; }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+    }
+
+    .stat-number span { color: var(--accent-light); }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.25rem;
+    }
+
+    /* ═══ SECTIONS ═══ */
+    section {
+      padding: 7rem 2rem;
+      position: relative;
+    }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-light);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.7;
+    }
+
+    /* ═══ MANIFESTO ═══ */
+    .manifesto {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .manifesto-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 3rem;
+    }
+
+    .manifesto-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .manifesto-text h3 em {
+      color: var(--accent-light);
+      font-style: italic;
+    }
+
+    .manifesto-text p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .manifesto-visual {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .manifesto-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .manifesto-card:hover {
+      border-color: rgba(99,102,241,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .manifesto-card:nth-child(2) { transform: translateY(2rem); }
+    .manifesto-card:nth-child(2):hover { transform: translateY(calc(2rem - 4px)); }
+
+    .manifesto-card .icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent-glow);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .manifesto-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .manifesto-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ═══ PROCESS ═══ */
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .step {
+      position: relative;
+      padding: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .step:hover {
+      border-color: rgba(99,102,241,0.3);
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.3);
+    }
+
+    .step-number {
+      font-size: 3rem;
+      font-weight: 900;
+      color: rgba(99,102,241,0.1);
+      line-height: 1;
+      margin-bottom: 1rem;
+      letter-spacing: -0.05em;
+    }
+
+    .step h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .step p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .step-connector {
+      position: absolute;
+      top: 50%;
+      right: -1.25rem;
+      width: 2.5rem;
+      height: 2px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    .step:last-child .step-connector { display: none; }
+
+    /* ═══ PORTFOLIO ═══ */
+    .portfolio { background: var(--bg-secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    .portfolio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+    }
+
+    .portfolio-scroll {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .portfolio-item {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      aspect-ratio: 16/10;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .portfolio-item:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 32px 64px rgba(0,0,0,0.4);
+      border-color: rgba(99,102,241,0.3);
+    }
+
+    .portfolio-mockup {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .portfolio-mockup .browser-bar {
+      height: 28px;
+      background: rgba(255,255,255,0.03);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .browser-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .browser-dot:nth-child(1) { background: #ef4444; }
+    .browser-dot:nth-child(2) { background: #f59e0b; }
+    .browser-dot:nth-child(3) { background: #22c55e; }
+
+    .portfolio-content {
+      padding: 1.5rem;
+      height: calc(100% - 28px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .portfolio-content .niche-tag {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-light);
+      font-weight: 600;
+      background: var(--accent-glow);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.75rem;
+    }
+
+    .portfolio-content h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .portfolio-content .location {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(9,9,11,0.95) 0%, rgba(9,9,11,0) 50%);
+      display: flex;
+      align-items: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+
+    .portfolio-overlay span {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-light);
+    }
+
+    /* ═══ DIFFERENTIALS ═══ */
+    .diff-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .diff-card {
+      padding: 2.5rem 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diff-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .diff-card:hover::before { opacity: 1; }
+
+    .diff-card:hover {
+      border-color: rgba(99,102,241,0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+
+    .diff-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--accent-glow);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .diff-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .diff-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ═══ COMPARISON ═══ */
+    .comparison {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .comparison-table {
+      margin-top: 3rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .comp-header {
+      background: rgba(99,102,241,0.05);
+      padding: 1.25rem 1.5rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .comp-header:nth-child(3) {
+      color: var(--accent-light);
+    }
+
+    .comp-row {
+      display: contents;
+    }
+
+    .comp-cell {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .comp-cell:first-child {
+      color: var(--text-secondary);
+    }
+
+    .comp-cell:nth-child(2) {
+      text-align: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+
+    .comp-cell:nth-child(3) {
+      text-align: center;
+      justify-content: center;
+      color: var(--accent-light);
+      font-weight: 600;
+    }
+
+    .comp-check { color: #22c55e; font-size: 1.1rem; }
+    .comp-x { color: #ef4444; font-size: 1.1rem; }
+
+    /* ═══ TESTIMONIALS ═══ */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .testimonial {
+      padding: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: all 0.3s;
+    }
+
+    .testimonial:hover {
+      border-color: rgba(99,102,241,0.2);
+    }
+
+    .testimonial-stars {
+      color: var(--accent-warm);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+
+    .testimonial p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #c084fc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+    }
+
+    .testimonial-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .testimonial-role {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ═══ CTA ═══ */
+    .cta-section {
+      text-align: center;
+      padding: 8rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(99,102,241,0.08) 0%, transparent 70%);
+    }
+
+    .cta-section .section-inner {
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-whatsapp {
+      background: #25d366;
+      color: white;
+      box-shadow: 0 0 30px rgba(37,211,102,0.2);
+    }
+
+    .btn-whatsapp:hover {
+      background: #22c55e;
+      box-shadow: 0 0 40px rgba(37,211,102,0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-whatsapp svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+
+    /* ═══ FOOTER ═══ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    footer .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    footer .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: var(--text-secondary); }
+
+    /* ═══ SCROLL REVEAL ═══ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ═══ FLOATING SHAPES ═══ */
+    .floating-shape {
+      position: absolute;
+      border: 1px solid rgba(99,102,241,0.1);
+      border-radius: var(--radius);
+      pointer-events: none;
+    }
+
+    /* ═══ NUMBER TICKER ═══ */
+    .ticker { display: inline-block; }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 1024px) {
+      .process-steps { grid-template-columns: repeat(2, 1fr); }
+      .step-connector { display: none; }
+      .portfolio-scroll { grid-template-columns: repeat(2, 1fr); }
+      .diff-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .manifesto-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .process-steps { grid-template-columns: 1fr; }
+      .portfolio-scroll { grid-template-columns: 1fr; }
+      .diff-grid { grid-template-columns: 1fr; }
+      .comparison-table { grid-template-columns: 1.5fr 1fr 1fr; }
+      .comp-cell, .comp-header { padding: 0.75rem; font-size: 0.8rem; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-direction: column; gap: 1.5rem; }
+      .portfolio-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      footer .footer-inner { flex-direction: column; gap: 1rem; }
+    }
+
+    /* ═══ MARQUEE ═══ */
+    .marquee-section {
+      padding: 2rem 0;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-primary);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 3rem;
+      animation: marquee 30s linear infinite;
+      width: max-content;
+    }
+
+    .marquee-item {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .marquee-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">sites<span>.</span>sob<span>.</span>medida</a>
+    <ul class="nav-links">
+      <li><a href="#manifesto">Manifesto</a></li>
+      <li><a href="#processo">Processo</a></li>
+      <li><a href="#portfolio">Portfólio</a></li>
+      <li><a href="#diferenciais">Diferenciais</a></li>
+      <li><a href="#cta" class="nav-cta">Falar Comigo</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="pulse"></div>
+      Aceito novos projetos
+    </div>
+    <h1>
+      Seu negócio merece um site<br>
+      <span class="gradient-text">que ninguém mais tem.</span>
+    </h1>
+    <p>
+      Nada de templates. Nada de arrastar e soltar. Cada site que crio é uma peça única, desenhada do zero para a identidade e o público do seu negócio.
+    </p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn btn-primary">Quero meu site exclusivo</a>
+      <a href="#portfolio" class="btn btn-outline">Ver trabalhos</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number"><span class="ticker" data-target="91">0</span>+</div>
+        <div class="stat-label">Sites entregues</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number"><span class="ticker" data-target="0">0</span></div>
+        <div class="stat-label">Templates usados</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number"><span class="ticker" data-target="100">0</span>%</div>
+        <div class="stat-label">Personalizados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item"><div class="marquee-dot"></div>Restaurantes</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Clínicas Odontológicas</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Escritórios de Advocacia</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Barbearias</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Academias</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Salões de Beleza</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Pet Shops</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Floriculturas</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Óticas</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Estúdios de Tatuagem</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>SPAs &amp; Estéticas</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Contabilidades</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Fotógrafos</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Clínicas Médicas</div>
+    <!-- duplicate for seamless loop -->
+    <div class="marquee-item"><div class="marquee-dot"></div>Restaurantes</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Clínicas Odontológicas</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Escritórios de Advocacia</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Barbearias</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Academias</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Salões de Beleza</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Pet Shops</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Floriculturas</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Óticas</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Estúdios de Tatuagem</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>SPAs &amp; Estéticas</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Contabilidades</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Fotógrafos</div>
+    <div class="marquee-item"><div class="marquee-dot"></div>Clínicas Médicas</div>
+  </div>
+</div>
+
+<!-- ═══ MANIFESTO ═══ -->
+<section class="manifesto" id="manifesto">
+  <div class="section-inner">
+    <div class="section-label reveal">Nosso manifesto</div>
+    <div class="manifesto-grid">
+      <div class="manifesto-text reveal">
+        <h3>
+          "Templates são para quem não tem <em>história para contar</em>."
+        </h3>
+        <p>
+          A sua pizzaria não é igual à do bairro vizinho. A sua clínica não tem a mesma atmosfera que a concorrente. Então por que o site seria igual?
+        </p>
+        <p>
+          Cada projeto começa com pesquisa real: analisamos seu Instagram, avaliações no Google, cardápio, fachada, público, concorrência. O site nasce de quem você é, não de um molde genérico.
+        </p>
+      </div>
+      <div class="manifesto-visual">
+        <div class="manifesto-card reveal reveal-delay-1">
+          <div class="icon">&#x1f50d;</div>
+          <h4>Pesquisa profunda</h4>
+          <p>Analisamos seu negócio, concorrentes e público antes de criar uma única linha.</p>
+        </div>
+        <div class="manifesto-card reveal reveal-delay-2">
+          <div class="icon">&#x1f3a8;</div>
+          <h4>Design exclusivo</h4>
+          <p>Paleta, tipografia e layout pensados unicamente para a sua marca.</p>
+        </div>
+        <div class="manifesto-card reveal reveal-delay-3">
+          <div class="icon">&#x1f4f8;</div>
+          <h4>Conteúdo real</h4>
+          <p>Suas fotos reais, seus serviços reais, sua identidade verdadeira.</p>
+        </div>
+        <div class="manifesto-card reveal reveal-delay-4">
+          <div class="icon">&#x26a1;</div>
+          <h4>Performance máxima</h4>
+          <p>Sites leves, rápidos e otimizados para aparecer no Google.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROCESSO ═══ -->
+<section id="processo">
+  <div class="section-inner">
+    <div class="section-label reveal">Como funciona</div>
+    <div class="section-title reveal">Do briefing ao ar em 4 passos.</div>
+    <div class="section-subtitle reveal">Sem burocracia, sem meses de espera. Processo enxuto com resultado profissional.</div>
+    <div class="process-steps">
+      <div class="step reveal reveal-delay-1">
+        <div class="step-number">01</div>
+        <h3>Imersão no negócio</h3>
+        <p>Pesquiso tudo sobre você: redes sociais, avaliações, cardápio, concorrentes, localização. Entendo quem você é antes de criar.</p>
+        <div class="step-connector"></div>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-number">02</div>
+        <h3>Design sob medida</h3>
+        <p>Crio identidade visual, paleta de cores e layout do zero. Nenhum template. Cada pixel pensado para o seu público.</p>
+        <div class="step-connector"></div>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-number">03</div>
+        <h3>Desenvolvimento</h3>
+        <p>Codifico com performance e SEO. Cada interação, cada animação, cada detalhe otimizado para converter visitantes em clientes.</p>
+        <div class="step-connector"></div>
+      </div>
+      <div class="step reveal reveal-delay-4">
+        <div class="step-number">04</div>
+        <h3>Entrega e suporte</h3>
+        <p>Publico seu site, configuro o domínio, e garanto que tudo funcione perfeito. Você recebe o site pronto para usar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PORTFÓLIO ═══ -->
+<section class="portfolio" id="portfolio">
+  <div class="section-inner">
+    <div class="portfolio-header">
+      <div>
+        <div class="section-label reveal">Portfólio</div>
+        <div class="section-title reveal">91 sites. 91 histórias únicas.</div>
+        <div class="section-subtitle reveal">Cada projeto é diferente porque cada negócio é diferente.</div>
+      </div>
+    </div>
+    <div class="portfolio-scroll">
+      <div class="portfolio-item reveal reveal-delay-1">
+        <div class="portfolio-mockup">
+          <div class="browser-bar">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+          </div>
+          <div class="portfolio-content" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+            <div>
+              <div class="niche-tag">Gastronomia</div>
+              <h4>Artusi Ristorante</h4>
+              <p class="location">Florianópolis, SC</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-2">
+        <div class="portfolio-mockup">
+          <div class="browser-bar">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+          </div>
+          <div class="portfolio-content" style="background: linear-gradient(135deg, #0f2027 0%, #203a43 100%);">
+            <div>
+              <div class="niche-tag">Odontologia</div>
+              <h4>Vivera Odontologia Premium</h4>
+              <p class="location">Florianópolis, SC</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-3">
+        <div class="portfolio-mockup">
+          <div class="browser-bar">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+          </div>
+          <div class="portfolio-content" style="background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 100%);">
+            <div>
+              <div class="niche-tag">Advocacia</div>
+              <h4>Franzoni Advocacia</h4>
+              <p class="location">Florianópolis, SC</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-1">
+        <div class="portfolio-mockup">
+          <div class="browser-bar">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+          </div>
+          <div class="portfolio-content" style="background: linear-gradient(135deg, #1a2a0a 0%, #2d4e1b 100%);">
+            <div>
+              <div class="niche-tag">Estética</div>
+              <h4>Bellessence SPA</h4>
+              <p class="location">Florianópolis, SC</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-2">
+        <div class="portfolio-mockup">
+          <div class="browser-bar">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+          </div>
+          <div class="portfolio-content" style="background: linear-gradient(135deg, #2a0a0a 0%, #4e1b1b 100%);">
+            <div>
+              <div class="niche-tag">Tatuagem</div>
+              <h4>New Body Art Tattoo</h4>
+              <p class="location">Florianópolis, SC</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="portfolio-item reveal reveal-delay-3">
+        <div class="portfolio-mockup">
+          <div class="browser-bar">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+          </div>
+          <div class="portfolio-content" style="background: linear-gradient(135deg, #0a1a2a 0%, #1b2d4e 100%);">
+            <div>
+              <div class="niche-tag">Oftalmologia</div>
+              <h4>Hospital de Olhos Florianópolis</h4>
+              <p class="location">Florianópolis, SC</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DIFERENCIAIS ═══ -->
+<section id="diferenciais">
+  <div class="section-inner">
+    <div class="section-label reveal">Por que somos diferentes</div>
+    <div class="section-title reveal">Não vendemos sites. Criamos identidades digitais.</div>
+    <div class="diff-grid">
+      <div class="diff-card reveal reveal-delay-1">
+        <div class="diff-icon">&#x2728;</div>
+        <h3>Zero templates</h3>
+        <p>Cada site é codificado do zero. Não usamos Wix, WordPress com tema pronto, ou qualquer plataforma de arrastar e soltar. Código limpo, original, seu.</p>
+      </div>
+      <div class="diff-card reveal reveal-delay-2">
+        <div class="diff-icon">&#x1f9e0;</div>
+        <h3>Pesquisa antes do design</h3>
+        <p>Antes de criar, estudamos seu negócio: perfil no Instagram, avaliações no Google, cardápio, concorrentes, perfil do bairro. O site nasce de dados reais.</p>
+      </div>
+      <div class="diff-card reveal reveal-delay-3">
+        <div class="diff-icon">&#x1f4f1;</div>
+        <h3>Mobile-first</h3>
+        <p>Mais de 80% dos seus clientes acessam pelo celular. Cada site é desenhado pensando primeiro no smartphone, depois no desktop.</p>
+      </div>
+      <div class="diff-card reveal reveal-delay-1">
+        <div class="diff-icon">&#x1f680;</div>
+        <h3>Performance extrema</h3>
+        <p>Sites leves que carregam em menos de 2 segundos. Sem plugins pesados, sem código desnecessário. Velocidade que o Google premia.</p>
+      </div>
+      <div class="diff-card reveal reveal-delay-2">
+        <div class="diff-icon">&#x1f50e;</div>
+        <h3>SEO nativo</h3>
+        <p>Estrutura semântica, meta tags, dados estruturados, sitemap. Tudo configurado para seu negócio aparecer nas buscas locais.</p>
+      </div>
+      <div class="diff-card reveal reveal-delay-3">
+        <div class="diff-icon">&#x1f3af;</div>
+        <h3>Foco em conversão</h3>
+        <p>Botão de WhatsApp, call-to-action estratégicos, prova social. Cada elemento pensado para transformar visitante em cliente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMPARAÇÃO ═══ -->
+<section class="comparison" id="comparacao">
+  <div class="section-inner">
+    <div class="section-label reveal">Comparação honesta</div>
+    <div class="section-title reveal">Template vs. Site Sob Medida</div>
+    <div class="comparison-table reveal">
+      <div class="comp-header">Característica</div>
+      <div class="comp-header">Template pronto</div>
+      <div class="comp-header">Site sob medida</div>
+
+      <div class="comp-row">
+        <div class="comp-cell">Design exclusivo para seu negócio</div>
+        <div class="comp-cell"><span class="comp-x">&#x2717;</span></div>
+        <div class="comp-cell"><span class="comp-check">&#x2713;</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">Pesquisa do mercado e concorrentes</div>
+        <div class="comp-cell"><span class="comp-x">&#x2717;</span></div>
+        <div class="comp-cell"><span class="comp-check">&#x2713;</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">Código limpo e otimizado</div>
+        <div class="comp-cell"><span class="comp-x">&#x2717;</span></div>
+        <div class="comp-cell"><span class="comp-check">&#x2713;</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">Identidade visual única</div>
+        <div class="comp-cell"><span class="comp-x">&#x2717;</span></div>
+        <div class="comp-cell"><span class="comp-check">&#x2713;</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">SEO configurado para buscas locais</div>
+        <div class="comp-cell">Básico</div>
+        <div class="comp-cell"><span class="comp-check">&#x2713;</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">Carregamento rápido (&lt;2s)</div>
+        <div class="comp-cell">Raramente</div>
+        <div class="comp-cell"><span class="comp-check">&#x2713;</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">Conteúdo com fotos e dados reais</div>
+        <div class="comp-cell"><span class="comp-x">&#x2717;</span></div>
+        <div class="comp-cell"><span class="comp-check">&#x2713;</span></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">Animações e interações profissionais</div>
+        <div class="comp-cell"><span class="comp-x">&#x2717;</span></div>
+        <div class="comp-cell"><span class="comp-check">&#x2713;</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DEPOIMENTOS ═══ -->
+<section id="depoimentos">
+  <div class="section-inner">
+    <div class="section-label reveal">O que dizem nossos clientes</div>
+    <div class="section-title reveal">Quem viu, aprovou.</div>
+    <div class="testimonials-grid">
+      <div class="testimonial reveal reveal-delay-1">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"Eu achava que ia receber mais um site genérico. Quando vi o resultado, não acreditei que era meu. Ficou com a cara da minha clínica."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">RC</div>
+          <div>
+            <div class="testimonial-name">Dr. Ricardo</div>
+            <div class="testimonial-role">Clínica Odontológica</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial reveal reveal-delay-2">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"Meus clientes agora me encontram pelo Google. Antes eu dependia só do Instagram. O site profissional mudou o patamar do meu negócio."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">CM</div>
+          <div>
+            <div class="testimonial-name">Cassiane Meira</div>
+            <div class="testimonial-role">Estética e Beleza</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial reveal reveal-delay-3">
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p>"O cara pesquisou meu restaurante inteiro antes de começar. Sabia o prato mais pedido, o estilo da casa. O site ficou perfeito."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">TM</div>
+          <div>
+            <div class="testimonial-name">Toninho</div>
+            <div class="testimonial-role">Restaurante</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA FINAL ═══ -->
+<section class="cta-section" id="cta">
+  <div class="section-inner">
+    <div class="section-label reveal">Pronto para começar?</div>
+    <h2 class="reveal">Seu negócio merece<br>mais que um template.</h2>
+    <p class="reveal">Manda uma mensagem, me conta sobre seu negócio, e eu mostro o que consigo fazer por você.</p>
+    <div class="cta-actions reveal">
+      <a href="https://wa.me/5548999999999?text=Oi!%20Quero%20saber%20mais%20sobre%20o%20site%20sob%20medida" class="btn btn-whatsapp" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Chamar no WhatsApp
+      </a>
+      <a href="#portfolio" class="btn btn-outline">Ver portfólio completo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <p>sites.sob.medida &mdash; Sites únicos para negócios únicos.</p>
+    <div class="footer-links">
+      <a href="#portfolio">Portfólio</a>
+      <a href="#processo">Processo</a>
+      <a href="#cta">Contato</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ═══ CURSOR GLOW ═══
+  const glow = document.getElementById('cursorGlow');
+  document.addEventListener('mousemove', e => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+
+  // ═══ NAV SCROLL ═══
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // ═══ SCROLL REVEAL ═══
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // ═══ NUMBER TICKER ═══
+  const tickers = document.querySelectorAll('.ticker');
+  const tickerObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target);
+        const duration = 2000;
+        const start = performance.now();
+
+        function tick(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.floor(eased * target);
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+
+        requestAnimationFrame(tick);
+        tickerObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  tickers.forEach(el => tickerObserver.observe(el));
+
+  // ═══ SMOOTH ANCHOR ═══
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+
+</body>
+</html>
