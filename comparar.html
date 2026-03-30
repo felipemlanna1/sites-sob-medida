@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparar Sites | Cloudflare vs GitHub Pages</title>
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --bg2: #111113;
+      --bg3: #18181b;
+      --border: #27272a;
+      --text: #fafafa;
+      --text2: #a1a1aa;
+      --text3: #71717a;
+      --accent: #6366f1;
+      --accent2: #818cf8;
+      --green: #22c55e;
+      --green-bg: rgba(34,197,94,0.08);
+      --orange: #f59e0b;
+      --orange-bg: rgba(245,158,11,0.08);
+      --red: #ef4444;
+      --red-bg: rgba(239,68,68,0.08);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+
+    .header {
+      position:sticky; top:0; z-index:50; background:rgba(10,10,11,0.9); backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border); padding:1.25rem 2rem;
+    }
+    .header-inner { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+    .header h1 { font-size:1.25rem; font-weight:800; letter-spacing:-0.03em; }
+    .header h1 span { color:var(--accent2); }
+
+    .stats { display:flex; gap:1.5rem; }
+    .stat-box { text-align:center; }
+    .stat-num { font-size:1.5rem; font-weight:800; color:var(--accent2); }
+    .stat-label { font-size:0.7rem; color:var(--text3); text-transform:uppercase; letter-spacing:0.05em; }
+
+    .controls {
+      max-width:1400px; margin:1.5rem auto; padding:0 2rem;
+      display:flex; gap:1rem; flex-wrap:wrap; align-items:center;
+    }
+    .search {
+      flex:1; min-width:200px; padding:0.6rem 1rem; border-radius:8px;
+      background:var(--bg3); border:1px solid var(--border); color:var(--text);
+      font-size:0.875rem; outline:none; transition:border-color 0.2s;
+    }
+    .search:focus { border-color:var(--accent); }
+    .filter-btn {
+      padding:0.5rem 1rem; border-radius:8px; border:1px solid var(--border);
+      background:var(--bg3); color:var(--text2); font-size:0.8rem; cursor:pointer;
+      transition:all 0.2s; font-weight:500;
+    }
+    .filter-btn:hover, .filter-btn.active { border-color:var(--accent); color:var(--accent2); background:rgba(99,102,241,0.08); }
+
+    .table-wrap { max-width:1400px; margin:0 auto; padding:0 2rem 4rem; }
+
+    table { width:100%; border-collapse:collapse; }
+    thead { position:sticky; top:68px; z-index:40; }
+    th {
+      text-align:left; padding:0.75rem 1rem; font-size:0.7rem; font-weight:700;
+      text-transform:uppercase; letter-spacing:0.06em; color:var(--text3);
+      background:var(--bg2); border-bottom:1px solid var(--border);
+    }
+    td {
+      padding:0.6rem 1rem; border-bottom:1px solid var(--border);
+      font-size:0.85rem; vertical-align:top;
+    }
+    tr:hover td { background:rgba(255,255,255,0.02); }
+    tr.has-both:hover td { background:rgba(99,102,241,0.03); }
+
+    .lead-id { font-weight:700; color:var(--text3); font-size:0.8rem; font-variant-numeric:tabular-nums; }
+    .lead-name { font-weight:600; color:var(--text); }
+    .lead-niche {
+      display:inline-block; font-size:0.65rem; padding:0.15rem 0.5rem; border-radius:4px;
+      background:rgba(99,102,241,0.1); color:var(--accent2); font-weight:600;
+      text-transform:uppercase; letter-spacing:0.03em; margin-top:0.2rem;
+    }
+    .lead-score {
+      font-weight:700; font-variant-numeric:tabular-nums; font-size:0.9rem;
+    }
+    .score-high { color:var(--green); }
+    .score-mid { color:var(--orange); }
+    .score-low { color:var(--text3); }
+
+    .link-cell a {
+      display:inline-flex; align-items:center; gap:0.35rem; padding:0.3rem 0.65rem;
+      border-radius:6px; font-size:0.75rem; font-weight:600; text-decoration:none;
+      transition:all 0.2s; word-break:break-all;
+    }
+    .link-cf a { background:var(--green-bg); color:var(--green); border:1px solid rgba(34,197,94,0.15); }
+    .link-cf a:hover { background:rgba(34,197,94,0.15); border-color:var(--green); }
+    .link-gh a { background:var(--orange-bg); color:var(--orange); border:1px solid rgba(245,158,11,0.15); }
+    .link-gh a:hover { background:rgba(245,158,11,0.15); border-color:var(--orange); }
+    .link-private { color:var(--text3); font-size:0.75rem; font-style:italic; }
+
+    .gh-list { display:flex; flex-direction:column; gap:0.35rem; }
+
+    .badge-cf, .badge-gh, .badge-both, .badge-none {
+      display:inline-block; font-size:0.65rem; font-weight:700; padding:0.15rem 0.5rem;
+      border-radius:4px; text-transform:uppercase; letter-spacing:0.03em;
+    }
+    .badge-both { background:rgba(99,102,241,0.12); color:var(--accent2); }
+    .badge-cf { background:var(--green-bg); color:var(--green); }
+    .badge-gh { background:var(--orange-bg); color:var(--orange); }
+    .badge-none { background:var(--red-bg); color:var(--red); }
+
+    .section-title {
+      font-size:1rem; font-weight:700; color:var(--text2); margin:2rem 0 1rem;
+      padding-bottom:0.5rem; border-bottom:1px solid var(--border);
+    }
+
+    .compare-btn {
+      display:inline-flex; align-items:center; gap:0.3rem; padding:0.25rem 0.5rem;
+      border-radius:5px; font-size:0.7rem; font-weight:600; cursor:pointer;
+      background:rgba(99,102,241,0.1); color:var(--accent2); border:1px solid rgba(99,102,241,0.2);
+      text-decoration:none; transition:all 0.2s;
+    }
+    .compare-btn:hover { background:rgba(99,102,241,0.2); border-color:var(--accent); }
+
+    @media(max-width:768px) {
+      .controls { padding:0 1rem; }
+      .table-wrap { padding:0 0.5rem 4rem; }
+      td, th { padding:0.5rem 0.5rem; font-size:0.75rem; }
+      .stats { gap:0.75rem; }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>Comparar Sites <span>CF vs GH</span></h1>
+    <div class="stats">
+      <div class="stat-box"><div class="stat-num" id="statTotal">0</div><div class="stat-label">Total Leads</div></div>
+      <div class="stat-box"><div class="stat-num" id="statCF">0</div><div class="stat-label">No Cloudflare</div></div>
+      <div class="stat-box"><div class="stat-num" id="statGH">0</div><div class="stat-label">No GitHub</div></div>
+      <div class="stat-box"><div class="stat-num" id="statBoth">0</div><div class="stat-label">Ambos</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <input type="text" class="search" id="search" placeholder="Buscar por nome, nicho ou ID...">
+  <button class="filter-btn active" data-filter="all">Todos</button>
+  <button class="filter-btn" data-filter="both">Ambos (comparar)</button>
+  <button class="filter-btn" data-filter="cf-only">Apenas CF</button>
+  <button class="filter-btn" data-filter="gh-only">Apenas GH</button>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50px">#</th>
+        <th style="width:220px">Lead</th>
+        <th style="width:55px">Score</th>
+        <th style="width:60px">Status</th>
+        <th>Cloudflare</th>
+        <th>GitHub Pages</th>
+        <th style="width:80px">Acao</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <div class="section-title" id="extrasTitle" style="display:none">Repos site-* sem numero (versoes antigas)</div>
+  <table id="extrasTable" style="display:none">
+    <thead>
+      <tr>
+        <th style="width:50px">#</th>
+        <th>Repo</th>
+        <th>GitHub Pages</th>
+      </tr>
+    </thead>
+    <tbody id="extrasTbody"></tbody>
+  </table>
+</div>
+
+<script>
+const DATA = {"rows": [{"id": 17, "name": "Portugaria", "score": 81, "niche": "restaurante", "cf": "https://portfolio-sites-5vj.pages.dev/17-portugaria/", "gh": [{"repo": "17-portugaria", "url": "https://felipemlanna1.github.io/17-portugaria/", "public": true}]}, {"id": 20, "name": "Lead #20", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/20-arante-restaurante/", "gh": [{"repo": "20-arante", "url": "https://felipemlanna1.github.io/20-arante/", "public": true}]}, {"id": 33, "name": "Lead #33", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/33-carneiro-odontologia/", "gh": [{"repo": "33-carneiro-odontologia", "url": "https://felipemlanna1.github.io/33-carneiro-odontologia/", "public": true}]}, {"id": 40, "name": "Pizza Di Pietre", "score": 85, "niche": "pizzaria", "cf": "https://portfolio-sites-5vj.pages.dev/40-pizza-di-pietre/", "gh": [{"repo": "40-pizza-di-pietre", "url": "https://felipemlanna1.github.io/40-pizza-di-pietre/", "public": true}]}, {"id": 41, "name": "Caprese Floripa", "score": 85, "niche": "pizzaria", "cf": "https://portfolio-sites-5vj.pages.dev/41-caprese-floripa/", "gh": [{"repo": "41-caprese-floripa", "url": "https://felipemlanna1.github.io/41-caprese-floripa/", "public": true}]}, {"id": 45, "name": "Lead #45", "score": null, "niche": "", "cf": null, "gh": [{"repo": "45-ocampo-advogados", "url": "https://felipemlanna1.github.io/45-ocampo-advogados/", "public": true}]}, {"id": 57, "name": "Lead #57", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/057-consagrado-burger/", "gh": [{"repo": "57-consagrado", "url": null, "public": false}, {"repo": "57-consagrado-burger", "url": null, "public": false}]}, {"id": 63, "name": "Lead #63", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/63-bellessence-spa/", "gh": [{"repo": "63-bellessence", "url": null, "public": false}]}, {"id": 67, "name": "Na Lenha Hamburgueria", "score": 85, "niche": "hamburgueria", "cf": "https://portfolio-sites-5vj.pages.dev/67-na-lenha/", "gh": [{"repo": "67-na-lenha", "url": null, "public": false}]}, {"id": 76, "name": "Rock Burger Artesanal", "score": 88, "niche": "hamburgueria", "cf": "https://portfolio-sites-5vj.pages.dev/76-rock-burger/", "gh": [{"repo": "76-rock-burger", "url": null, "public": false}, {"repo": "site-076-rock-burger", "url": null, "public": false}]}, {"id": 85, "name": "Lead #85", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/085-camila-brito-nutricao/", "gh": [{"repo": "85-camila-brito", "url": null, "public": false}]}, {"id": 89, "name": "Lead #89", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/89-faquetti-advocacia/", "gh": [{"repo": "89-faquetti", "url": null, "public": false}]}, {"id": 94, "name": "CMP Advocacia Previdenciária", "score": 83, "niche": "advogado", "cf": "https://portfolio-sites-5vj.pages.dev/94-cmp-advocacia/", "gh": [{"repo": "94-cmp-advocacia", "url": null, "public": false}]}, {"id": 108, "name": "Lead #108", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/108-pieretti-zaia/", "gh": [{"repo": "108-pieretti-zaia", "url": "https://felipemlanna1.github.io/108-pieretti-zaia/", "public": true}]}, {"id": 111, "name": "Lead #111", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/111-franzoni-advocacia/", "gh": [{"repo": "111-franzoni", "url": "https://felipemlanna1.github.io/111-franzoni/", "public": true}]}, {"id": 116, "name": "Lead #116", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/116-capital-contabilidade/", "gh": [{"repo": "116-capital-contabilidade", "url": "https://felipemlanna1.github.io/116-capital-contabilidade/", "public": true}]}, {"id": 161, "name": "Odonto Ingleses", "score": 85, "niche": "dentista", "cf": "https://portfolio-sites-5vj.pages.dev/161-odonto-ingleses/", "gh": [{"repo": "161-odonto-ingleses", "url": "https://felipemlanna1.github.io/161-odonto-ingleses/", "public": true}]}, {"id": 164, "name": "Cassiane Meira Odontologia", "score": 84, "niche": "dentista", "cf": "https://portfolio-sites-5vj.pages.dev/164-cassiane-meira/", "gh": [{"repo": "164-cassiane-meira", "url": "https://felipemlanna1.github.io/164-cassiane-meira/", "public": true}]}, {"id": 193, "name": "Salão de Beleza Canasvieiras Claudia Nieto", "score": 87, "niche": "salão de beleza", "cf": "https://portfolio-sites-5vj.pages.dev/193-claudia-nieto/", "gh": [{"repo": "193-claudia-nieto", "url": "https://felipemlanna1.github.io/193-claudia-nieto/", "public": true}, {"repo": "site-193-claudia-nieto-salao", "url": null, "public": false}]}, {"id": 235, "name": "Lead #235", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/235-toninho-mecanica/", "gh": [{"repo": "235-toninho-mecanica", "url": "https://felipemlanna1.github.io/235-toninho-mecanica/", "public": true}]}, {"id": 248, "name": "Lagoa Odontologia Integrada", "score": 85, "niche": "dentista", "cf": "https://portfolio-sites-5vj.pages.dev/248-lagoa-odonto/", "gh": [{"repo": "248-lagoa-odonto", "url": "https://felipemlanna1.github.io/248-lagoa-odonto/", "public": true}]}, {"id": 266, "name": "Lead #266", "score": null, "niche": "", "cf": null, "gh": [{"repo": "266-guto-fonseca", "url": "https://felipemlanna1.github.io/266-guto-fonseca/", "public": true}]}, {"id": 288, "name": "Clínica Amarante Odontologia", "score": 81, "niche": "dentista", "cf": "https://portfolio-sites-5vj.pages.dev/288-amarante-odonto/", "gh": [{"repo": "288-amarante-odonto", "url": "https://felipemlanna1.github.io/288-amarante-odonto/", "public": true}]}, {"id": 311, "name": "Lead #311", "score": null, "niche": "", "cf": null, "gh": [{"repo": "311-fx-idiomas", "url": "https://felipemlanna1.github.io/311-fx-idiomas/", "public": true}]}, {"id": 319, "name": "Rancho Açoriano", "score": 81, "niche": "restaurante", "cf": "https://portfolio-sites-5vj.pages.dev/319-rancho-acoriano/", "gh": [{"repo": "319-rancho-acoriano", "url": "https://felipemlanna1.github.io/319-rancho-acoriano/", "public": true}]}, {"id": 337, "name": "Lead #337", "score": null, "niche": "", "cf": null, "gh": [{"repo": "337-by-cuca", "url": "https://felipemlanna1.github.io/337-by-cuca/", "public": true}]}, {"id": 340, "name": "Lead #340", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/340-otica-especialista/", "gh": [{"repo": "340-otica-especialista", "url": "https://felipemlanna1.github.io/340-otica-especialista/", "public": true}]}, {"id": 368, "name": "Incorpore Academia", "score": 84, "niche": "academia", "cf": "https://portfolio-sites-5vj.pages.dev/368-incorpore-academia/", "gh": [{"repo": "368-incorpore", "url": "https://felipemlanna1.github.io/368-incorpore/", "public": true}, {"repo": "368-incorpore-academia", "url": "https://felipemlanna1.github.io/368-incorpore-academia/", "public": true}]}, {"id": 409, "name": "Sotalia Sports Campeche", "score": 81, "niche": "academia", "cf": "https://portfolio-sites-5vj.pages.dev/409-sotalia-sports/", "gh": [{"repo": "409-sotalia-sports", "url": "https://felipemlanna1.github.io/409-sotalia-sports/", "public": true}]}, {"id": 432, "name": "Lead #432", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/432-floricultura-mundo-verde/", "gh": [{"repo": "432-floricultura-mundo-verde", "url": "https://felipemlanna1.github.io/432-floricultura-mundo-verde/", "public": true}]}, {"id": 437, "name": "DentCare Palhoça", "score": 84, "niche": "dentista", "cf": "https://portfolio-sites-5vj.pages.dev/437-dentcare-palhoca/", "gh": [{"repo": "437-dentcare", "url": "https://felipemlanna1.github.io/437-dentcare/", "public": true}, {"repo": "437-dentcare-palhoca", "url": "https://felipemlanna1.github.io/437-dentcare-palhoca/", "public": true}]}, {"id": 458, "name": "Academia Forma e Formas", "score": 80, "niche": "academia", "cf": "https://portfolio-sites-5vj.pages.dev/458-forma-e-formas/", "gh": [{"repo": "458-forma-e-formas", "url": "https://felipemlanna1.github.io/458-forma-e-formas/", "public": true}]}, {"id": 466, "name": "Oficio Barbearia Kobrasol", "score": 91, "niche": "barbearia", "cf": "https://portfolio-sites-5vj.pages.dev/466-oficio-barbearia/", "gh": [{"repo": "466-oficio-barbearia", "url": "https://felipemlanna1.github.io/466-oficio-barbearia/", "public": true}, {"repo": "site-466-oficio-barbearia", "url": null, "public": false}]}, {"id": 482, "name": "Just Gym Academia", "score": 81, "niche": "academia", "cf": "https://portfolio-sites-5vj.pages.dev/482-just-gym/", "gh": [{"repo": "482-just-gym", "url": "https://felipemlanna1.github.io/482-just-gym/", "public": true}]}, {"id": 490, "name": "Academia Jungle Fitness Premium", "score": 81, "niche": "academia", "cf": "https://portfolio-sites-5vj.pages.dev/490-jungle-fitness/", "gh": [{"repo": "490-jungle-fitness", "url": "https://felipemlanna1.github.io/490-jungle-fitness/", "public": true}]}, {"id": 504, "name": "Academia Forma e Formas Palhoca", "score": 80, "niche": "academia", "cf": "https://portfolio-sites-5vj.pages.dev/504-forma-e-formas-palhoca/", "gh": [{"repo": "504-forma-e-formas-palhoca", "url": "https://felipemlanna1.github.io/504-forma-e-formas-palhoca/", "public": true}]}, {"id": 529, "name": "Artusi Ristorante", "score": 83, "niche": "restaurante-fine-dining", "cf": "https://portfolio-sites-5vj.pages.dev/529-artusi-ristorante/", "gh": [{"repo": "529-artusi-ristorante", "url": "https://felipemlanna1.github.io/529-artusi-ristorante/", "public": true}]}, {"id": 531, "name": "Kuay Sushi", "score": 81, "niche": "restaurante-japones-premium", "cf": "https://portfolio-sites-5vj.pages.dev/531-kuay-sushi/", "gh": [{"repo": "531-kuay-sushi", "url": null, "public": false}]}, {"id": 532, "name": "Lead #532", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/532-koniko-sushi/", "gh": [{"repo": "532-koniko", "url": null, "public": false}]}, {"id": 534, "name": "Lead #534", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/534-kikoni-japafood/", "gh": [{"repo": "534-kikoni", "url": null, "public": false}]}, {"id": 535, "name": "Lead #535", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/535-sushi-yama/", "gh": [{"repo": "535-sushi-yama", "url": null, "public": false}]}, {"id": 536, "name": "Lead #536", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/536-otao-sushi/", "gh": [{"repo": "536-otao-sushi", "url": null, "public": false}]}, {"id": 537, "name": "Dr. Leonello Bocchese - Cirurgião Plástico", "score": 86, "niche": "cirurgiao-plastico", "cf": "https://portfolio-sites-5vj.pages.dev/537-dr-leonello/", "gh": [{"repo": "537-dr-leonello", "url": null, "public": false}]}, {"id": 539, "name": "Lead #539", "score": null, "niche": "", "cf": null, "gh": [{"repo": "539-dr-ricardo-votto", "url": "https://felipemlanna1.github.io/539-dr-ricardo-votto/", "public": true}]}, {"id": 540, "name": "Clínica Mendes - Cirurgia Plástica", "score": 82, "niche": "cirurgiao-plastico", "cf": "https://portfolio-sites-5vj.pages.dev/540-clinica-mendes/", "gh": [{"repo": "540-clinica-mendes", "url": null, "public": false}]}, {"id": 541, "name": "Lead #541", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/541-dr-leandro-grangeiro/", "gh": [{"repo": "541-dr-leandro", "url": null, "public": false}]}, {"id": 543, "name": "Dr. Afonso Buss - Cirurgião Plástico", "score": 81, "niche": "cirurgiao-plastico", "cf": "https://portfolio-sites-5vj.pages.dev/543-afonso-buss/", "gh": [{"repo": "543-afonso-buss", "url": null, "public": false}]}, {"id": 544, "name": "Hospital da Plástica de Santa Catarina", "score": 82, "niche": "cirurgiao-plastico", "cf": "https://portfolio-sites-5vj.pages.dev/544-hospital-plastica/", "gh": [{"repo": "544-hospital-plastica", "url": null, "public": false}]}, {"id": 549, "name": "Clinipele Amorim Dermatologia", "score": 83, "niche": "dermatologista", "cf": "https://portfolio-sites-5vj.pages.dev/549-clinipele/", "gh": [{"repo": "549-clinipele", "url": null, "public": false}]}, {"id": 550, "name": "Dra. Rafaela Salvato - Dermatologista", "score": 85, "niche": "dermatologista", "cf": "https://portfolio-sites-5vj.pages.dev/550-dra-rafaela-salvato/", "gh": [{"repo": "550-dra-rafaela-salvato", "url": null, "public": false}]}, {"id": 553, "name": "Lead #553", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/553-shambala-spa/", "gh": [{"repo": "553-shambala-spa", "url": null, "public": false}]}, {"id": 554, "name": "Vittae Spa", "score": 81, "niche": "spa-premium", "cf": "https://portfolio-sites-5vj.pages.dev/554-vittae-spa/", "gh": [{"repo": "554-vittae-spa", "url": null, "public": false}]}, {"id": 557, "name": "Hotel Boutique Quinta das Videiras", "score": 81, "niche": "hotel-boutique", "cf": "https://portfolio-sites-5vj.pages.dev/557-quinta-das-videiras/", "gh": [{"repo": "557-quinta-das-videiras", "url": null, "public": false}]}, {"id": 558, "name": "Perfeccionare Estética", "score": 82, "niche": "clinica-estetica", "cf": "https://portfolio-sites-5vj.pages.dev/558-perfeccionare/", "gh": [{"repo": "558-perfeccionare", "url": null, "public": false}]}, {"id": 559, "name": "Lead #559", "score": null, "niche": "", "cf": null, "gh": [{"repo": "559-gk-estetica", "url": "https://felipemlanna1.github.io/559-gk-estetica/", "public": true}]}, {"id": 560, "name": "Dr. Vitor Erlacher - Harmonização Facial", "score": 84, "niche": "clinica-estetica", "cf": "https://portfolio-sites-5vj.pages.dev/560-dr-vitor-erlacher/", "gh": [{"repo": "560-dr-vitor-erlacher", "url": null, "public": false}, {"repo": "560-vitor-erlacher", "url": null, "public": false}]}, {"id": 561, "name": "Clínica Ibelli", "score": 83, "niche": "clinica-estetica", "cf": "https://portfolio-sites-5vj.pages.dev/561-clinica-ibelli/", "gh": [{"repo": "561-clinica-ibelli", "url": null, "public": false}]}, {"id": 562, "name": "Clínica Pillar - Cirurgia Plástica e Estética", "score": 81, "niche": "clinica-estetica", "cf": "https://portfolio-sites-5vj.pages.dev/562-clinica-pillar/", "gh": [{"repo": "562-clinica-pillar", "url": null, "public": false}]}, {"id": 564, "name": "Lead #564", "score": null, "niche": "", "cf": null, "gh": [{"repo": "564-hof", "url": "https://felipemlanna1.github.io/564-hof/", "public": true}]}, {"id": 565, "name": "Lead #565", "score": null, "niche": "", "cf": null, "gh": [{"repo": "565-olhos-sao-sebastiao", "url": "https://felipemlanna1.github.io/565-olhos-sao-sebastiao/", "public": true}]}, {"id": 566, "name": "Lead #566", "score": null, "niche": "", "cf": null, "gh": [{"repo": "566-oftalmocenter", "url": "https://felipemlanna1.github.io/566-oftalmocenter/", "public": true}]}, {"id": 570, "name": "Lead #570", "score": null, "niche": "", "cf": null, "gh": [{"repo": "570-assad-rayes", "url": "https://felipemlanna1.github.io/570-assad-rayes/", "public": true}]}, {"id": 581, "name": "Vivera Odontologia Premium", "score": 81, "niche": "odontologia-premium", "cf": "https://portfolio-sites-5vj.pages.dev/581-vivera-odonto/", "gh": [{"repo": "581-vivera-odonto", "url": null, "public": false}]}, {"id": 582, "name": "Lead #582", "score": null, "niche": "", "cf": null, "gh": [{"repo": "582-catarinense-implantes", "url": "https://felipemlanna1.github.io/582-catarinense-implantes/", "public": true}]}, {"id": 592, "name": "Lead #592", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/592-dorini-arquitetura/", "gh": [{"repo": "592-dorini-arquitetura", "url": null, "public": false}]}, {"id": 597, "name": "AnimalVet - Clínica Veterinária", "score": 82, "niche": "veterinaria-premium", "cf": "https://portfolio-sites-5vj.pages.dev/597-animalvet/", "gh": [{"repo": "597-animalvet", "url": null, "public": false}]}, {"id": 599, "name": "Lead #599", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/599-digitalvet/", "gh": [{"repo": "599-digitalvet", "url": null, "public": false}]}, {"id": 600, "name": "Lead #600", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/600-flora-edler/", "gh": [{"repo": "600-flora-edler", "url": null, "public": false}]}, {"id": 604, "name": "Lead #604", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/604-crespi-sports-fisio/", "gh": [{"repo": "604-crespi-sports", "url": null, "public": false}]}, {"id": 607, "name": "Centro Pro Sport", "score": 80, "niche": "fisioterapia-premium", "cf": "https://portfolio-sites-5vj.pages.dev/607-centro-pro-sport/", "gh": [{"repo": "607-centro-pro-sport", "url": null, "public": false}]}, {"id": 609, "name": "Lead #609", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/609-pedro-queiroz-advocacia/", "gh": [{"repo": "609-pedro-queiroz", "url": null, "public": false}]}, {"id": 617, "name": "Lead #617", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/617-psicologo-floripa/", "gh": [{"repo": "617-psicologo-floripa", "url": null, "public": false}]}, {"id": 638, "name": "Alonso Fotografia", "score": 80, "niche": "estudio-fotografia", "cf": "https://portfolio-sites-5vj.pages.dev/638-alonso-fotografia/", "gh": [{"repo": "638-alonso-fotografia", "url": null, "public": false}]}, {"id": 639, "name": "Lead #639", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/639-mangrich-fotografia/", "gh": [{"repo": "639-thiago-mangrich", "url": null, "public": false}]}, {"id": 720, "name": "New Body Art Tattoo", "score": 87, "niche": "tatuagem", "cf": "https://portfolio-sites-5vj.pages.dev/720-new-body-art/", "gh": [{"repo": "720-new-body-art", "url": null, "public": false}, {"repo": "site-720-new-body-art-tattoo", "url": null, "public": false}]}, {"id": 721, "name": "Vinsant Lopez Tattoo", "score": 82, "niche": "tatuagem", "cf": "https://portfolio-sites-5vj.pages.dev/721-vinsant-tattoo/", "gh": [{"repo": "721-vinsant-tattoo", "url": null, "public": false}]}, {"id": 723, "name": "Côza Linda Pet Hotel", "score": 87, "niche": "pet_hotel", "cf": "https://portfolio-sites-5vj.pages.dev/723-coza-linda/", "gh": [{"repo": "723-coza-linda", "url": null, "public": false}, {"repo": "site-723-coza-linda-pet-hotel", "url": null, "public": false}]}, {"id": 787, "name": "Lead #787", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/787-ceu-da-boca/", "gh": [{"repo": "787-ceu-da-boca", "url": null, "public": false}]}, {"id": 788, "name": "Lead #788", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/788-cm-oficina/", "gh": [{"repo": "788-cm-oficina", "url": null, "public": false}]}, {"id": 789, "name": "Lead #789", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/789-otica-especialista-centro/", "gh": [{"repo": "789-otica-centro", "url": null, "public": false}]}, {"id": 790, "name": "Lead #790", "score": null, "niche": "", "cf": "https://portfolio-sites-5vj.pages.dev/790-floricultura-dona-flor/", "gh": [{"repo": "790-dona-flor", "url": null, "public": false}]}, {"id": 793, "name": "Guto Fonseca Fotografia", "score": 85, "niche": "fotografo", "cf": "https://portfolio-sites-5vj.pages.dev/793-guto-fonseca/", "gh": []}, {"id": 794, "name": "FX Language School", "score": 88, "niche": "escola-idiomas", "cf": "https://portfolio-sites-5vj.pages.dev/794-fx-idiomas/", "gh": []}, {"id": 795, "name": "HOF - Hospital de Olhos Florianópolis", "score": 90, "niche": "oftalmologista", "cf": "https://portfolio-sites-5vj.pages.dev/795-hof-hospital-olhos/", "gh": []}, {"id": 796, "name": "Clínica de Olhos São Sebastião", "score": 85, "niche": "oftalmologista", "cf": "https://portfolio-sites-5vj.pages.dev/796-clinica-sao-sebastiao/", "gh": []}, {"id": 797, "name": "Oftalmocenter", "score": 85, "niche": "oftalmologista", "cf": "https://portfolio-sites-5vj.pages.dev/797-oftalmocenter/", "gh": []}, {"id": 798, "name": "Instituto da Visão Assad Rayes", "score": 85, "niche": "oftalmologista", "cf": "https://portfolio-sites-5vj.pages.dev/798-assad-rayes/", "gh": []}, {"id": 799, "name": "Catarinense Implantes", "score": 88, "niche": "odontologia", "cf": "https://portfolio-sites-5vj.pages.dev/799-catarinense-implantes/", "gh": []}], "extras": [{"repo": "site-acorde-odonto", "url": "https://felipemlanna1.github.io/site-acorde-odonto/"}, {"repo": "site-afonso-buss", "url": "https://felipemlanna1.github.io/site-afonso-buss/"}, {"repo": "site-alonso-fotografia", "url": "https://felipemlanna1.github.io/site-alonso-fotografia/"}, {"repo": "site-amarante-odonto", "url": "https://felipemlanna1.github.io/site-amarante-odonto/"}, {"repo": "site-animalvet", "url": "https://felipemlanna1.github.io/site-animalvet/"}, {"repo": "site-arante-restaurante", "url": "https://felipemlanna1.github.io/site-arante-restaurante/"}, {"repo": "site-artusi", "url": "https://felipemlanna1.github.io/site-artusi/"}, {"repo": "site-artusi-ristorante", "url": "https://felipemlanna1.github.io/site-artusi-ristorante/"}, {"repo": "site-bellessence-spa", "url": "https://felipemlanna1.github.io/site-bellessence-spa/"}, {"repo": "site-blanc-odontologia", "url": "https://felipemlanna1.github.io/site-blanc-odontologia/"}, {"repo": "site-boteco-da-ilha", "url": "https://felipemlanna1.github.io/site-boteco-da-ilha/"}, {"repo": "site-botequim-floripa", "url": "https://felipemlanna1.github.io/site-botequim-floripa/"}, {"repo": "site-briani-imoveis", "url": "https://felipemlanna1.github.io/site-briani-imoveis/"}, {"repo": "site-by-cuca-restaurante", "url": "https://felipemlanna1.github.io/site-by-cuca-restaurante/"}, {"repo": "site-camila-brito-nutri", "url": "https://felipemlanna1.github.io/site-camila-brito-nutri/"}, {"repo": "site-capital-contabilidade", "url": "https://felipemlanna1.github.io/site-capital-contabilidade/"}, {"repo": "site-caprese-floripa", "url": "https://felipemlanna1.github.io/site-caprese-floripa/"}, {"repo": "site-carneiro-odontologia", "url": "https://felipemlanna1.github.io/site-carneiro-odontologia/"}, {"repo": "site-cassiane-meira", "url": "https://felipemlanna1.github.io/site-cassiane-meira/"}, {"repo": "site-centro-pro-sport", "url": "https://felipemlanna1.github.io/site-centro-pro-sport/"}, {"repo": "site-ceu-da-boca", "url": "https://felipemlanna1.github.io/site-ceu-da-boca/"}, {"repo": "site-claudia-nieto", "url": "https://felipemlanna1.github.io/site-claudia-nieto/"}, {"repo": "site-claudia-nieto-salao", "url": "https://felipemlanna1.github.io/site-claudia-nieto-salao/"}, {"repo": "site-clinica-ibelli", "url": "https://felipemlanna1.github.io/site-clinica-ibelli/"}, {"repo": "site-clinica-mendes", "url": "https://felipemlanna1.github.io/site-clinica-mendes/"}, {"repo": "site-clinica-pillar", "url": "https://felipemlanna1.github.io/site-clinica-pillar/"}, {"repo": "site-clinipele", "url": "https://felipemlanna1.github.io/site-clinipele/"}, {"repo": "site-clinipele-amorim", "url": "https://felipemlanna1.github.io/site-clinipele-amorim/"}, {"repo": "site-cm-oficina", "url": "https://felipemlanna1.github.io/site-cm-oficina/"}, {"repo": "site-cmp-advocacia", "url": "https://felipemlanna1.github.io/site-cmp-advocacia/"}, {"repo": "site-coei-odontologia", "url": "https://felipemlanna1.github.io/site-coei-odontologia/"}, {"repo": "site-consagrado-burger", "url": "https://felipemlanna1.github.io/site-consagrado-burger/"}, {"repo": "site-coza-linda", "url": "https://felipemlanna1.github.io/site-coza-linda/"}, {"repo": "site-coza-linda-pet", "url": "https://felipemlanna1.github.io/site-coza-linda-pet/"}, {"repo": "site-coza-linda-pet-hotel", "url": "https://felipemlanna1.github.io/site-coza-linda-pet-hotel/"}, {"repo": "site-crespi-sports-fisio", "url": "https://felipemlanna1.github.io/site-crespi-sports-fisio/"}, {"repo": "site-dentcare-palhoca", "url": "https://felipemlanna1.github.io/site-dentcare-palhoca/"}, {"repo": "site-digitalvet", "url": "https://felipemlanna1.github.io/site-digitalvet/"}, {"repo": "site-dona-flor", "url": "https://felipemlanna1.github.io/site-dona-flor/"}, {"repo": "site-dorini-arquitetura", "url": "https://felipemlanna1.github.io/site-dorini-arquitetura/"}, {"repo": "site-dr-leandro-grangeiro", "url": "https://felipemlanna1.github.io/site-dr-leandro-grangeiro/"}, {"repo": "site-dr-leonello-bocchese", "url": "https://felipemlanna1.github.io/site-dr-leonello-bocchese/"}, {"repo": "site-dr-ricardo-votto", "url": "https://felipemlanna1.github.io/site-dr-ricardo-votto/"}, {"repo": "site-faquetti-advocacia", "url": "https://felipemlanna1.github.io/site-faquetti-advocacia/"}, {"repo": "site-flora-edler-nutri", "url": "https://felipemlanna1.github.io/site-flora-edler-nutri/"}, {"repo": "site-floricultura-ingleses", "url": "https://felipemlanna1.github.io/site-floricultura-ingleses/"}, {"repo": "site-floricultura-mundo-verde", "url": "https://felipemlanna1.github.io/site-floricultura-mundo-verde/"}, {"repo": "site-floripa-lanches", "url": "https://felipemlanna1.github.io/site-floripa-lanches/"}, {"repo": "site-forma-e-formas", "url": "https://felipemlanna1.github.io/site-forma-e-formas/"}, {"repo": "site-franzoni-advocacia", "url": "https://felipemlanna1.github.io/site-franzoni-advocacia/"}, {"repo": "site-fx-idiomas", "url": "https://felipemlanna1.github.io/site-fx-idiomas/"}, {"repo": "site-gk-estetica", "url": "https://felipemlanna1.github.io/site-gk-estetica/"}, {"repo": "site-guto-fonseca-fotografia", "url": "https://felipemlanna1.github.io/site-guto-fonseca-fotografia/"}, {"repo": "site-hospital-plastica", "url": "https://felipemlanna1.github.io/site-hospital-plastica/"}, {"repo": "site-ibelli", "url": "https://felipemlanna1.github.io/site-ibelli/"}, {"repo": "site-incorpore-academia", "url": "https://felipemlanna1.github.io/site-incorpore-academia/"}, {"repo": "site-jungle-fitness", "url": "https://felipemlanna1.github.io/site-jungle-fitness/"}, {"repo": "site-just-gym", "url": "https://felipemlanna1.github.io/site-just-gym/"}, {"repo": "site-kuay-sushi", "url": "https://felipemlanna1.github.io/site-kuay-sushi/"}, {"repo": "site-lagoa-odonto", "url": "https://felipemlanna1.github.io/site-lagoa-odonto/"}, {"repo": "site-leonello-bocchese", "url": "https://felipemlanna1.github.io/site-leonello-bocchese/"}, {"repo": "site-mendes", "url": "https://felipemlanna1.github.io/site-mendes/"}, {"repo": "site-na-lenha", "url": "https://felipemlanna1.github.io/site-na-lenha/"}, {"repo": "site-new-body-art", "url": "https://felipemlanna1.github.io/site-new-body-art/"}, {"repo": "site-new-body-art-tattoo", "url": "https://felipemlanna1.github.io/site-new-body-art-tattoo/"}, {"repo": "site-odonto-ingleses", "url": "https://felipemlanna1.github.io/site-odonto-ingleses/"}, {"repo": "site-oficio-barbearia", "url": "https://felipemlanna1.github.io/site-oficio-barbearia/"}, {"repo": "site-omg-advogados", "url": "https://felipemlanna1.github.io/site-omg-advogados/"}, {"repo": "site-otica-especialista-centro", "url": "https://felipemlanna1.github.io/site-otica-especialista-centro/"}, {"repo": "site-otica-especialista-trindade", "url": "https://felipemlanna1.github.io/site-otica-especialista-trindade/"}, {"repo": "site-pedro-de-queiroz-advocacia", "url": "https://felipemlanna1.github.io/site-pedro-de-queiroz-advocacia/"}, {"repo": "site-pedro-queiroz", "url": "https://felipemlanna1.github.io/site-pedro-queiroz/"}, {"repo": "site-perfeccionare", "url": "https://felipemlanna1.github.io/site-perfeccionare/"}, {"repo": "site-pieretti-zaia", "url": "https://felipemlanna1.github.io/site-pieretti-zaia/"}, {"repo": "site-pizza-di-pietre", "url": "https://felipemlanna1.github.io/site-pizza-di-pietre/"}, {"repo": "site-portugaria", "url": "https://felipemlanna1.github.io/site-portugaria/"}, {"repo": "site-psicologo-floripa", "url": "https://felipemlanna1.github.io/site-psicologo-floripa/"}, {"repo": "site-quinta-videiras", "url": "https://felipemlanna1.github.io/site-quinta-videiras/"}, {"repo": "site-rafaela-salvato", "url": "https://felipemlanna1.github.io/site-rafaela-salvato/"}, {"repo": "site-rancho-acoriano", "url": "https://felipemlanna1.github.io/site-rancho-acoriano/"}, {"repo": "site-rock-burger", "url": "https://felipemlanna1.github.io/site-rock-burger/"}, {"repo": "site-rock-burger-artesanal", "url": "https://felipemlanna1.github.io/site-rock-burger-artesanal/"}, {"repo": "site-sotalia-sports", "url": "https://felipemlanna1.github.io/site-sotalia-sports/"}, {"repo": "site-thiago-mangrich", "url": "https://felipemlanna1.github.io/site-thiago-mangrich/"}, {"repo": "site-toninho-mecanica", "url": "https://felipemlanna1.github.io/site-toninho-mecanica/"}, {"repo": "site-trindade-odontologia", "url": "https://felipemlanna1.github.io/site-trindade-odontologia/"}, {"repo": "site-vantaggio", "url": "https://felipemlanna1.github.io/site-vantaggio/"}, {"repo": "site-vinsant-tattoo", "url": "https://felipemlanna1.github.io/site-vinsant-tattoo/"}, {"repo": "site-vitor-erlacher", "url": "https://felipemlanna1.github.io/site-vitor-erlacher/"}, {"repo": "site-vittae-spa", "url": "https://felipemlanna1.github.io/site-vittae-spa/"}, {"repo": "site-vivera-odontologia", "url": "https://felipemlanna1.github.io/site-vivera-odontologia/"}]};
+
+function getScoreClass(s) {
+  if (!s) return 'score-low';
+  if (s >= 85) return 'score-high';
+  if (s >= 70) return 'score-mid';
+  return 'score-low';
+}
+
+function getStatus(row) {
+  const hasCF = !!row.cf;
+  const hasGH = row.gh.some(g => g.public);
+  if (hasCF && hasGH) return 'both';
+  if (hasCF) return 'cf-only';
+  if (hasGH) return 'gh-only';
+  return 'none';
+}
+
+function renderTable(filter, query) {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '';
+  let total=0, cfCount=0, ghCount=0, bothCount=0;
+
+  DATA.rows.forEach((row, i) => {
+    const status = getStatus(row);
+    const hasCF = !!row.cf;
+    const hasGH = row.gh.some(g => g.public);
+
+    total++;
+    if (hasCF) cfCount++;
+    if (hasGH) ghCount++;
+    if (hasCF && hasGH) bothCount++;
+
+    if (filter !== 'all' && filter !== status) return;
+
+    const searchStr = `${row.id} ${row.name} ${row.niche}`.toLowerCase();
+    if (query && !searchStr.includes(query.toLowerCase())) return;
+
+    const tr = document.createElement('tr');
+    if (status === 'both') tr.classList.add('has-both');
+
+    const badgeMap = {
+      both: '<span class="badge-both">AMBOS</span>',
+      'cf-only': '<span class="badge-cf">CF</span>',
+      'gh-only': '<span class="badge-gh">GH</span>',
+      none: '<span class="badge-none">NENHUM</span>'
+    };
+
+    const ghHtml = row.gh.length ? row.gh.map(g => {
+      if (g.public && g.url) {
+        return `<div class="link-gh"><a href="${g.url}" target="_blank">${g.repo}</a></div>`;
+      } else {
+        return `<div class="link-private">${g.repo} (privado)</div>`;
+      }
+    }).join('') : '<span class="link-private">-</span>';
+
+    const cfHtml = row.cf
+      ? `<div class="link-cf"><a href="${row.cf}" target="_blank">${row.cf.replace('https://portfolio-sites-5vj.pages.dev/','')}</a></div>`
+      : '<span class="link-private">-</span>';
+
+    let actionHtml = '';
+    if (hasCF && hasGH) {
+      const ghUrl = row.gh.find(g => g.public)?.url || '';
+      actionHtml = `<a class="compare-btn" href="${row.cf}" target="_blank" title="Abrir CF">CF</a> <a class="compare-btn" href="${ghUrl}" target="_blank" title="Abrir GH">GH</a>`;
+    }
+
+    tr.innerHTML = `
+      <td><span class="lead-id">${row.id}</span></td>
+      <td><div class="lead-name">${row.name}</div>${row.niche ? '<div class="lead-niche">'+row.niche+'</div>' : ''}</td>
+      <td><span class="lead-score ${getScoreClass(row.score)}">${row.score || '-'}</span></td>
+      <td>${badgeMap[status]}</td>
+      <td>${cfHtml}</td>
+      <td><div class="gh-list">${ghHtml}</div></td>
+      <td>${actionHtml}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statCF').textContent = cfCount;
+  document.getElementById('statGH').textContent = ghCount;
+  document.getElementById('statBoth').textContent = bothCount;
+
+  // Extras
+  const extrasTitle = document.getElementById('extrasTitle');
+  const extrasTable = document.getElementById('extrasTable');
+  const extrasTbody = document.getElementById('extrasTbody');
+  if (filter === 'all' || filter === 'gh-only') {
+    extrasTitle.style.display = '';
+    extrasTable.style.display = '';
+    extrasTbody.innerHTML = '';
+    DATA.extras.forEach((ex, i) => {
+      if (query && !ex.repo.toLowerCase().includes(query.toLowerCase())) return;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td><span class="lead-id">${i+1}</span></td><td>${ex.repo}</td><td class="link-gh"><a href="${ex.url}" target="_blank">${ex.url}</a></td>`;
+      extrasTbody.appendChild(tr);
+    });
+  } else {
+    extrasTitle.style.display = 'none';
+    extrasTable.style.display = 'none';
+  }
+}
+
+// Events
+document.getElementById('search').addEventListener('input', e => {
+  const active = document.querySelector('.filter-btn.active');
+  renderTable(active?.dataset.filter || 'all', e.target.value);
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTable(btn.dataset.filter, document.getElementById('search').value);
+  });
+});
+
+renderTable('all', '');
+</script>
+
+</body>
+</html>
