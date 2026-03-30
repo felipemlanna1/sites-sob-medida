@@ -149,33 +149,37 @@ function buildCard(row){
   row.versions.forEach(v=>{
     const tClass=v.type==='numbered'?'t-numbered':v.type==='site-num'?'t-gh':'t-site-name';
     const label=v.type==='numbered'?'Mais recente':v.type==='site-num'?'Intermediario':'Versao antiga';
-    grid.appendChild(makeVer(row.id,v.repo,v.url,label+' ('+v.type+')',tClass,v.public));
+    grid.appendChild(makeVer(row.id,v.repo,v.url,label+' ('+v.type+')',tClass,v.public,v.preview));
   });
 
   return card;
 }
 
-function makeVer(lid,key,url,label,tClass,isPublic){
+function makeVer(lid,key,url,label,tClass,isPublic,preview){
   const el=document.createElement('div');
   const chosen=selections[lid]===key;
   el.className='ver-card'+(chosen?' chosen':'');
   el.dataset.key=key;
 
-  const previewHtml=url
-    ?'<iframe src="'+url+'" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>'
-    :'<div class="no-preview">Privado - sem preview</div>';
+  const previewUrl=preview||url;
+  const previewHtml=previewUrl
+    ?'<iframe src="'+previewUrl+'" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>'
+    :'<div class="no-preview">Sem preview disponivel</div>';
+
+  const openUrl=url||preview;
+  const repoStatus=isPublic?'':'<span style="color:var(--orange);font-size:.6rem"> (repo privado, preview via CF)</span>';
 
   el.innerHTML=`
   <div class="ver-preview">${previewHtml}</div>
   <div class="ver-info">
     <div class="ver-label"><span class="ver-type ${tClass}">${label}</span></div>
-    <div class="ver-repo">${key}</div>
-    ${url?'<div class="ver-link"><a href="'+url+'" target="_blank">Abrir em nova aba &#8599;</a></div>':'<div class="ver-link" style="color:var(--red)">Repo privado</div>'}
+    <div class="ver-repo">${key}${repoStatus}</div>
+    ${openUrl?'<div class="ver-link"><a href="'+openUrl+'" target="_blank">Abrir em nova aba &#8599;</a></div>':''}
     <div class="ver-actions">
       <button class="ver-btn ${chosen?'sel':''}" onclick="event.stopPropagation();select(${lid},'${key}',this)">
         ${chosen?'&#10003; Selecionado':'Selecionar como melhor'}
       </button>
-      ${url?'<a class="ver-btn" href="'+url+'" target="_blank" onclick="event.stopPropagation()">Abrir &#8599;</a>':''}
+      ${openUrl?'<a class="ver-btn" href="'+openUrl+'" target="_blank" onclick="event.stopPropagation()">Abrir &#8599;</a>':''}
     </div>
   </div>`;
   return el;
