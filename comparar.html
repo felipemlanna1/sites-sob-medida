@@ -145,8 +145,9 @@ function buildCard(row){
     grid.appendChild(makeVer(row.id,'cloudflare',row.cf,'Cloudflare','t-cf',true));
   }
 
-  // GH versions
+  // GH versions - skip private numbered/site-num if lead has CF (same content)
   row.versions.forEach(v=>{
+    if(!v.public && hasCF && (v.type==='numbered'||v.type==='site-num')) return;
     const tClass=v.type==='numbered'?'t-numbered':v.type==='site-num'?'t-gh':'t-site-name';
     const label=v.type==='numbered'?'Mais recente':v.type==='site-num'?'Intermediario':'Versao antiga';
     grid.appendChild(makeVer(row.id,v.repo,v.url,label+' ('+v.type+')',tClass,v.public,v.preview));
